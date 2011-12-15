@@ -26,6 +26,31 @@ test('where', function(){
 	equal(idResult[0].id, 3);
 });
 
+test('orderBy', function(){
+	var source = [2, 5, 6, 1, 7, 8, 9, 3, 10, 4];
+	var result = source.orderBy(function(a,b){ return a > b });
+
+	match(result, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+});
+
+test('groupBy', function(){
+	var source = [{ name : 'Attach'}, { name : 'Charactor'}, { name : 'Bee'}, { name : 'Cycle'}, { name : 'Add'}];
+	var result = 
+		source
+			.orderBy(function(a, b){ return a.name.charCodeAt(0) > b.name.charCodeAt(0); })
+			.groupBy(function(obj){ return obj.name[0]; });
+
+	console.log(result);
+	equal(result.length, 3);
+	equal(result[0].length, 2);
+	equal(result[1].length, 1);
+	equal(result[2].length, 2);
+
+	match(result[0].select(function(obj){ return obj.name; }), ['Attach', 'Add']);
+	match(result[1].select(function(obj){ return obj.name; }), ['Bee']);
+	match(result[2].select(function(obj){ return obj.name; }), ['Charactor', 'Cycle']);
+});
+
 
 
 
