@@ -1,5 +1,7 @@
 (function Mr_Array(){
 
+	var root = this;
+	
 	/*
 		select
 		selectMany
@@ -222,9 +224,7 @@
 			var _ = this;
 			return arr.all(function(o){ return _.contains(o, samePredicate); });
 		}
-	};
-
-	
+	};	
 
 	function __extend(obj, extend){
 		for(var key in extend){
