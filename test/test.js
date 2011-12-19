@@ -62,9 +62,9 @@ test('groupBy', function(){
 
 	function predicate(obj){ return obj.name; }
 
-	match(result[0].select(predicate), ['Attach', 'Add']);
-	match(result[1].select(predicate), ['Bee']);
-	match(result[2].select(predicate), ['Charactor', 'Cycle']);
+	equal(result[0].select(predicate).containsAll(['Attach', 'Add']), true);
+	equal(result[1].select(predicate).containsAll(['Bee']), true);
+	equal(result[2].select(predicate).containsAll(['Charactor', 'Cycle']), true);
 });
 
 

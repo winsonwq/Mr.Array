@@ -212,11 +212,15 @@
 			__assert_array(arr);
 			return this.concat(arr).distinct(samePredicate);
 		},
-		contains : function(obj, samePredicate){
-			__assert_function(samePredicate);			
+		contains : function(obj, samePredicate){			
 			return this.any(function(o){
 				return o === obj || samePredicate && samePredicate(obj, o) === true;
 			});
+		},
+		containsAll : function(arr, samePredicate){
+			__assert_array(arr);
+			var _ = this;
+			return arr.all(function(o){ return _.contains(o, samePredicate); });
 		}
 	};
 
