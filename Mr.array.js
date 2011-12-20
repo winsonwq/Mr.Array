@@ -11,6 +11,7 @@
 	/*
 		select
 		selectMany
+		toDictionary
 		where
 		orderBy
 		groupBy
@@ -27,6 +28,7 @@
 		union
 		diff
 		contains
+		containsAll
 	*/
 	var ext = {
 		select : function(predicate){
