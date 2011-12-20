@@ -1,10 +1,10 @@
 (function Mr_Array(){
 
 	// for require exports
-	var root = typeof(exports) !== 'undefined' ? exports : {};
+	var root = typeof exports !== 'undefined' ? exports : {};
 
 	// extend in Mr.js
-	if(this.Mr == null) 
+	if(typeof this.Mr === 'undefined')
 		this.Mr = {};
 	this.Mr.Array = root;
 
@@ -37,7 +37,7 @@
 
 			var result = [];
 			this.each(function(val, idx){
-				result.push(predicate.call(this, val));
+				result.push(predicate.call(this, val, idx));
 			});
 
 			return result;
@@ -46,7 +46,7 @@
 			__assert_function(predicate);
 
 			return this.select(function(val, idx){
-						var ret = predicate.call(this, val);
+						var ret = predicate.call(this, val, idx);
 						if(ret == null || !ret.isArray()){
 							throw 'return value is not a array object in selectMany method.';
 						}
@@ -63,7 +63,7 @@
 
 			var result = [];
 			this.each(function(val, idx){
-				if(predicate.call(this, val) === true){
+				if(predicate.call(this, val, idx) === true){
 					result.push(val);
 				}
 			});
@@ -80,7 +80,7 @@
 			var result = [];
 
 			this.each(function(val, idx){
-				var key = predicate.call(this, val);
+				var key = predicate.call(this, val, idx);
 				if(map[key] == null){
 					map[key] = [];
 				}
@@ -101,7 +101,7 @@
 
 			var ret = false;
 			this.each(function(val, idx){
-				if(predicate.call(this, val) === true){
+				if(predicate.call(this, val, idx) === true){
 					ret = true;
 					return 'BREAK';
 				}
@@ -115,7 +115,7 @@
 
 			var ret = true;
 			this.each(function(val, idx){
-				if(predicate.call(this, val) === false){
+				if(predicate.call(this, val, idx) === false){
 					ret = false;
 					return 'BREAK';
 				}
@@ -136,9 +136,9 @@
 
 			var dict = {};
 			this.each(function(val, idx){
-				var key = keySelector(val);
+				var key = keySelector.call(this, val, idx);
 				if(key && !(key in dict)){
-					dict[key.toString()] = valueSelector(val);
+					dict[key.toString()] = valueSelector.call(this, val, idx);
 				}
 			});
 			return dict;
