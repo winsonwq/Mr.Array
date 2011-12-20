@@ -299,7 +299,30 @@ test('intersect with objects', function(){
 	equal(result[0].b, 10);
 });
 
-test('comprehensive : index of book', function(){
+test('toDictionary', function(){
+	var source = [{ name : 'a',  value : [1,2,3] }, { name : 'b',  value : [4,5,6] }, { name : 'c',  value : [7,8,9] }, { name : 'a', value : [10, 11, 12] }];
+	var result = 
+			source.toDictionary(function(obj){
+				return obj.name + '_group';
+			}, function(obj){
+				return obj.value[0];
+			});
+	
+	var keys = [];
+	for(var key in result){
+		if(result.hasOwnProperty(key)){
+			keys.push(key);
+		}
+	}
+
+	equal(keys.length, 3);
+	equal(keys.containsAll(['a_group', 'b_group', 'c_group']), true);
+	equal(result[keys[0]], 1);
+	equal(result[keys[1]], 4);
+	equal(result[keys[2]], 7);
+});
+
+test('comprehensive : Group programming languages', function(){
 	// 2011年排行
 	var langs = [
 		'Java', 'C', 'C++', 'C#', 'PHP', 'Python', 'Visual Basic', 'Objective-C', 'Perl', 'JavaScript',
@@ -326,6 +349,42 @@ test('comprehensive : index of book', function(){
 
 	ok(result[result.length - 1]['V'], 'last one is start with "V".');
 	equal(result[result.length - 1]['V'].length, 2);
+});
+
+test('comprehensive : Group programming languages 2 using toDictionary', function(){
+	var langs = [
+		'Java', 'C', 'C++', 'C#', 'PHP', 'Python', 'Visual Basic', 'Objective-C', 'Perl', 'JavaScript',
+		'Ruby', 'Assembly*', 'Delphi', 'Go', 'Lisp', 'Lua', 'Ada', 'Pascal', 'NXT-G', 'Scheme*',
+		'RPG(OS/40)', 'Visual Basic .NET', 'Transact-SQL', 'R', 'Groovy', 'SAS', 'MATLAB', 'ABAP', 'Scratch', 'PL/SQL',
+		'Haskell', 'Logo', 'D', 'Object Pascal', 'Fortran', 'Alice', 'Forth', 'COBOL', 'Erlang', 'Bash', 
+		'ML', 'MAD', 'APL', 'Scala', 'F#', 'ActionScript', 'Smalltalk', 'C Shell', 'CL(OS/400)', 'Prolog'
+	];
+
+	var result = 
+		langs
+			.orderBy(function(a, b){ return a.charCodeAt(0) - b.charCodeAt(0); }) // important !!
+			.groupBy(function(name){ return name.charAt(0); })
+			.toDictionary(function(obj){
+				return obj[0].charAt(0);
+			}, function(obj){
+				return obj.orderBy(function(a, b){
+					return a.length - b.length;
+				});
+			});
+
+	var keys = [];
+	for(var key in result){
+		if(result.hasOwnProperty(key)){
+			keys.push(key);
+		}
+	}
+	equal(keys.length, 18);
+	equal(keys.containsAll(["A", "B", "C", "D", "E", "F", "G", "H", "J", "L", "M", "N", "O", "P", "R", "S", "T", "V"]), true);
+	equal(keys[0], 'A');
+	equal(keys[keys.length - 1], 'V');
+
+	equal(result[keys[0]].length, 6);
+	equal(result[keys[keys.length - 1]].length, 2);
 });
 
 

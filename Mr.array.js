@@ -1,7 +1,13 @@
 (function Mr_Array(){
 
-	var root = this;
-	
+	// for require exports
+	var root = typeof(exports) !== 'undefined' ? exports : {};
+
+	// extend in Mr.js
+	if(this.Mr == null) 
+		this.Mr = {};
+	this.Mr.Array = root;
+
 	/*
 		select
 		selectMany
@@ -31,7 +37,7 @@
 
 			var result = [];
 			this.each(function(val, idx){
-				result.push(predicate(val));
+				result.push(predicate.call(this, val));
 			});
 
 			return result;
@@ -40,7 +46,7 @@
 			__assert_function(predicate);
 
 			return this.select(function(val, idx){
-						var ret = predicate(val);
+						var ret = predicate.call(this, val);
 						if(ret == null || !ret.isArray()){
 							throw 'return value is not a array object in selectMany method.';
 						}
@@ -57,7 +63,7 @@
 
 			var result = [];
 			this.each(function(val, idx){
-				if(predicate(val) === true){
+				if(predicate.call(this, val) === true){
 					result.push(val);
 				}
 			});
@@ -74,7 +80,7 @@
 			var result = [];
 
 			this.each(function(val, idx){
-				var key = predicate(val);
+				var key = predicate.call(this, val);
 				if(map[key] == null){
 					map[key] = [];
 				}
@@ -95,7 +101,7 @@
 
 			var ret = false;
 			this.each(function(val, idx){
-				if(predicate(val) === true){
+				if(predicate.call(this, val) === true){
 					ret = true;
 					return 'BREAK';
 				}
@@ -109,7 +115,7 @@
 
 			var ret = true;
 			this.each(function(val, idx){
-				if(predicate(val) === false){
+				if(predicate.call(this, val) === false){
 					ret = false;
 					return 'BREAK';
 				}
@@ -123,6 +129,19 @@
 		skip : function(length){
 			__assert_number(length);
 			return this.slice(length);
+		},
+		toDictionary : function(keySelector, valueSelector){
+			__assert_function(keySelector);
+			__assert_function(valueSelector);
+
+			var dict = {};
+			this.each(function(val, idx){
+				var key = keySelector(val);
+				if(key && !(key in dict)){
+					dict[key.toString()] = valueSelector(val);
+				}
+			});
+			return dict;
 		},
 		each : function(callback){
 			if(callback.isFunction()){
@@ -226,6 +245,24 @@
 		}
 	};	
 
+	function __assert_array(arr){
+		if(arr && !arr.isArray()){
+			throw 'argument is not array.';
+		}
+	}
+
+	function __assert_function(func){
+		if(func && !func.isFunction()){
+			throw 'argument is not function.';
+		}
+	}
+
+	function __assert_number(num){
+		if(num && !num.isNumber()){
+			throw 'argument is not number.';
+		}
+	}
+
 	function __extend(obj, extend){
 		for(var key in extend){
 			if(extend.hasOwnProperty(key)){
@@ -243,6 +280,9 @@
 		},
 		isNumber : function(){
 			return {}.toString.call(this) === '[object Number]';
+		},
+		isString : function(){
+			return {}.toString.call(this) === '[object String]';
 		}
 	});
 
@@ -280,21 +320,16 @@
 		}
 	});
 
-	function __assert_array(arr){
-		if(arr && !arr.isArray()){
-			throw 'argument is not array.';
+	// extend static methods on root global object
+	function __bindMethod(obj, funcName, func){
+		obj[funcName] = function(){
+			var args = [].slice.call(arguments);
+			return func.apply(args[0], args.skip(1));
 		}
 	}
 
-	function __assert_function(func){
-		if(func && !func.isFunction()){
-			throw 'argument is not function.';
-		}
+	for(var funcName in ext){		
+		__bindMethod(root, funcName, ext[funcName]);
 	}
 
-	function __assert_number(num){
-		if(num && !num.isNumber()){
-			throw 'argument is not number.';
-		}
-	}
 })();
