@@ -15,7 +15,6 @@
 		where
 		orderBy
 		groupBy
-		except
 		any
 		all
 		take
@@ -30,6 +29,8 @@
 		contains
 		containsAll
 	*/
+	var version = '0.1.1';
+
 	var ext = {
 		select : function(predicate){
 			__assert_function(predicate);
@@ -49,7 +50,7 @@
 
 			return this.select(function(val, idx){
 						var ret = predicate.call(this, val, idx);
-						if(ret == null || !ret.isArray()){
+						if(ret == null || !root.isArray(ret)){
 							throw 'return value is not a array object in selectMany method.';
 						}
 						return ret;
@@ -90,7 +91,7 @@
 			});
 
 			for(var key in map){
-				if(map[key].isArray())
+				if(root.isArray(map[key]))
 					result.push(map[key]);
 			}
 
@@ -146,7 +147,7 @@
 			return dict;
 		},
 		each : function(callback){
-			if(callback.isFunction()){
+			if(root.isFunction(callback)){
 				for(var i = 0, len = this.length ; i < len ; i++ ){
 					var ret = callback.call(this, this[i], i);
 					if(ret == 'CONTINUE')
@@ -248,19 +249,19 @@
 	};	
 
 	function __assert_array(arr){
-		if(arr && !arr.isArray()){
+		if(arr && !root.isArray(arr)){
 			throw 'argument is not array.';
 		}
 	}
 
 	function __assert_function(func){
-		if(func && !func.isFunction()){
+		if(func && !root.isFunction(func)){
 			throw 'argument is not function.';
 		}
 	}
 
 	function __assert_number(num){
-		if(num && !num.isNumber()){
+		if(num && !root.isNumber(num)){
 			throw 'argument is not number.';
 		}
 	}
@@ -273,25 +274,25 @@
 		}
 	}
 
-	__extend(Object.prototype, {
-		isArray : function(){
-			return {}.toString.call(this) === '[object Array]';
+	__extend(root, {
+		isArray : function(obj){
+			return {}.toString.call(obj) === '[object Array]';
 		},
-		isFunction : function(){
-			return {}.toString.call(this) === '[object Function]';
+		isFunction : function(obj){
+			return {}.toString.call(obj) === '[object Function]';
 		},
-		isNumber : function(){
-			return {}.toString.call(this) === '[object Number]';
+		isNumber : function(obj){
+			return {}.toString.call(obj) === '[object Number]';
 		},
-		isString : function(){
-			return {}.toString.call(this) === '[object String]';
+		isString : function(obj){
+			return {}.toString.call(obj) === '[object String]';
 		}
 	});
 
 	__extend(Array.prototype, ext);
 
 	function Set(samePredicate){
-		if(samePredicate && samePredicate.isFunction()){
+		if(samePredicate && root.isFunction(samePredicate)){
 			this._func = samePredicate;
 		}
 
@@ -330,7 +331,7 @@
 		}
 	}
 
-	for(var funcName in ext){		
+	for(var funcName in ext){
 		__bindMethod(root, funcName, ext[funcName]);
 	}
 
