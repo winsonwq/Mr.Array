@@ -3,7 +3,7 @@
   "name": "Mr.Array",
   "description": "A JavaScript 'Array' object extention. Most of APIs is from C# Enumerable class and JavaScript 1.6 or JavaScript 1.7 Array object methods.",
   "version": "0.1.1",
-  "homepage": "http://github.com/winsonwq/Mr.Array",
+  "homepage": "https://github.com/winsonwq/Mr.Array/tree/master2",
   "repository": {
     "type": "git",
     "url": "git://github.com/winsonwq/Mr.Array.git"
