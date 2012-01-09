@@ -1,12 +1,16 @@
 (function Mr_Array(){
 
-	// for require exports
-	var root = typeof exports !== 'undefined' ? exports : {};
-
-	// extend in Mr.js
-	if(typeof this.Mr === 'undefined')
-		this.Mr = {};
-	this.Mr.Array = root;
+	var root;
+	
+	if (typeof exports !== 'undefined') {
+	    if (typeof module !== 'undefined' && module.exports) {
+	    	root = exports = module.exports;
+	    }
+    	root = exports;
+	} else {
+		if(this.Mr == null) this.Mr = {};
+		this.Mr.Array = root = {};
+	}
 
 	/*
 		select
