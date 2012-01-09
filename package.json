@@ -1,0 +1,18 @@
+{
+  "author": "Sheldon Wong <winsonwq@gmail.com> (http://sheldonw.sinaapp.com)",
+  "name": "Mr.Array",
+  "description": "A JavaScript 'Array' object extention. Most of APIs is from C# Enumerable class and JavaScript 1.6 or JavaScript 1.7 Array object methods.",
+  "version": "0.1.1",
+  "homepage": "http://github.com/winsonwq/Mr.Array",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/winsonwq/Mr.Array.git"
+  },
+  "main": "Mr.Array.js",
+  "engines": {
+    "node": ">=0.4.9"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
+

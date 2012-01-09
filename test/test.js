@@ -173,12 +173,11 @@ test('reduce_ltr to concat array with initialized value', function(){
 });
 
 test('reduce_rtl without initialized value', function(){
-	var source = [2, 5, 6, 1, 7, 8, 9, 3, 10, 4], i = 8;
-	var result = source.reduce_rtl(function(curr, old, idx, array){
-		equal(i--, idx);
-		
-		return curr + old;
-	});
+var source = [2, 5, 6, 1, 7, 8, 9, 3, 10, 4], i = 8;
+var result = source.reduce_rtl(function(curr, old, idx, array){
+	equal(i--, idx);
+	return curr + old;
+});
 
 	equal(result, 55);
 });
@@ -323,24 +322,24 @@ test('toDictionary', function(){
 });
 
 test('comprehensive : Group programming languages', function(){
-	// 2011年排行
-	var langs = [
-		'Java', 'C', 'C++', 'C#', 'PHP', 'Python', 'Visual Basic', 'Objective-C', 'Perl', 'JavaScript',
-		'Ruby', 'Assembly*', 'Delphi', 'Go', 'Lisp', 'Lua', 'Ada', 'Pascal', 'NXT-G', 'Scheme*',
-		'RPG(OS/40)', 'Visual Basic .NET', 'Transact-SQL', 'R', 'Groovy', 'SAS', 'MATLAB', 'ABAP', 'Scratch', 'PL/SQL',
-		'Haskell', 'Logo', 'D', 'Object Pascal', 'Fortran', 'Alice', 'Forth', 'COBOL', 'Erlang', 'Bash', 
-		'ML', 'MAD', 'APL', 'Scala', 'F#', 'ActionScript', 'Smalltalk', 'C Shell', 'CL(OS/400)', 'Prolog'
-	];
+// 2011年排行
+var langs = [
+	'Java', 'C', 'C++', 'C#', 'PHP', 'Python', 'Visual Basic', 'Objective-C', 'Perl', 'JavaScript',
+	'Ruby', 'Assembly*', 'Delphi', 'Go', 'Lisp', 'Lua', 'Ada', 'Pascal', 'NXT-G', 'Scheme*',
+	'RPG(OS/40)', 'Visual Basic .NET', 'Transact-SQL', 'R', 'Groovy', 'SAS', 'MATLAB', 'ABAP', 'Scratch', 'PL/SQL',
+	'Haskell', 'Logo', 'D', 'Object Pascal', 'Fortran', 'Alice', 'Forth', 'COBOL', 'Erlang', 'Bash', 
+	'ML', 'MAD', 'APL', 'Scala', 'F#', 'ActionScript', 'Smalltalk', 'C Shell', 'CL(OS/400)', 'Prolog'
+];
 
-	var result = 
-		langs
-			.orderBy(function(a, b){ return a.charCodeAt(0) - b.charCodeAt(0); }) // important !!
-			.groupBy(function(name){ return name.charAt(0); })
-			.select(function(group){
-				var obj = {};
-				obj[group[0].charAt(0)] = group.orderBy(function(a, b){ return a.length - b.length; });
-				return obj;
-			});
+var result = 
+	langs
+		.orderBy(function(a, b){ return a.charCodeAt(0) - b.charCodeAt(0); }) // important !!
+		.groupBy(function(name){ return name.charAt(0); })
+		.select(function(group){
+			var obj = {};
+			obj[group[0].charAt(0)] = group.orderBy(function(a, b){ return a.length - b.length; });
+			return obj;
+		});
 
 	equal(result.length, 18, 'all index number is 18.');
 
